@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🎉 Happy Birthday Celebration! 🎂</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@600&display=swap');
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 60% 60%, #fff7e6 0%, #ffd6e0 100%);
+      overflow-x: hidden;
+      font-family: 'Montserrat', Arial, sans-serif;
+    }
+    .sparkle {
+      pointer-events: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 2;
+    }
+    .balloon {
+      position: absolute;
+      bottom: -120px;
+      width: 80px;
+      height: 110px;
+      z-index: 6;
+      animation: float 7s linear infinite;
+    }
+    .balloon-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    @keyframes float {
+      0% { transform: translateY(0) scale(1) rotate(-4deg);}
+      50% { transform: translateY(-85vh) scale(1.03) rotate(4deg);}
+      100% { transform: translateY(-110vh) scale(1) rotate(-4deg);}
+    }
+    .banner {
+      margin-top: 50px;
+      font-family: 'Pacifico', cursive;
+      font-size: 3.2rem;
+      color: #f35b8a;
+      text-shadow: 0 4px 18px #fff, 2px 2px 0 #fecc50;
+      text-align: center;
+      letter-spacing: 2px;
+      z-index: 10;
+      position: relative;
+      animation: bannerpop 1.2s cubic-bezier(.4,2,.2,1) 1;
+    }
+    @keyframes bannerpop {
+      0% { transform: scale(0.2) rotate(-8deg);}
+      70% { transform: scale(1.15) rotate(3deg);}
+      100% { transform: scale(1) rotate(0);}
+    }
+    .message {
+      margin: 25px auto 30px;
+      background: rgba(255,255,255,0.88);
+      box-shadow: 0 2px 36px #f35b8a22;
+      max-width: 500px;
+      border-radius: 24px;
+      padding: 28px 26px;
+      text-align: center;
+      font-size: 1.3rem;
+      color: #555;
+      line-height: 1.7;
+    }
+    .gallery-title {
+      text-align: center;
+      font-family: 'Pacifico', cursive;
+      color: #ff93b3;
+      font-size: 2.1rem;
+      margin: 36px 0 10px;
+      letter-spacing: 1px;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 22px;
+      margin: 0 auto 42px;
+      max-width: 900px;
+    }
+    .photo {
+      width: 180px;
+      height: 180px;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px #f35b8a33;
+      background: #fff;
+      border: 2px solid #ffb6d1;
+      transition: transform 0.15s;
+    }
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .photo:hover {
+      transform: scale(1.07) rotate(-2deg);
+      box-shadow: 0 8px 36px #fecc5088;
+      border-color: #fecc50;
+    }
+    @media (max-width: 600px) {
+      .banner { font-size: 2.2rem; margin-top: 18px;}
+      .message { padding: 18px 10px; font-size: 1.1rem;}
+      .gallery { gap: 10px;}
+      .photo { width: 110px; height: 110px;}
+    }
+  </style>
+</head>
+<body>
+  <!-- Sparkles -->
+  <canvas class="sparkle"></canvas>
+  <!-- Balloons (JS will create more and animate them) -->
+  <div id="balloons"></div>
+  <!-- Banner -->
+  <div class="banner">🎉 Happy Birthday! 🎉</div>
+  <!-- Message -->
+  <div class="message">
+    Wishing you a day filled with laughter, love, and unforgettable memories.<br>
+    Celebrate big and let your dreams soar high like these balloons!
+  </div>
+  <!-- Gallery -->
+  <div class="gallery-title">Memorable Moments 📸</div>
+  <div class="gallery">
+    <div class="photo"><img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Birthday celebration"></div>
+    <div class="photo"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Friends"></div>
+    <div class="photo"><img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Cake"></div>
+    <div class="photo"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=400&q=80" alt="Candles"></div>
+    <div class="photo"><img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80" alt="Party"></div>
+  </div>
+  <script>
+    // Sparkles animation
+    const canvas = document.querySelector('.sparkle');
+    const ctx = canvas.getContext('2d');
+    let sparkles = [];
+    function resizeSparkle() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeSparkle);
+    resizeSparkle();
+    function randomSparkle() {
+      return {
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        r: Math.random()*1.8+1.1,
+        alpha: 0.7+Math.random()*0.3,
+        color: `hsl(${Math.floor(Math.random()*360)},90%,80%)`,
+        vx: (Math.random()-0.5)*0.3,
+        vy: (Math.random()-0.5)*0.3,
+      };
+    }
+    function drawSparkles() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for (let s of sparkles) {
+        ctx.save();
+        ctx.globalAlpha = s.alpha;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, 2*Math.PI);
+        ctx.fillStyle = s.color;
+        ctx.shadowColor = s.color;
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+    function updateSparkles() {
+      for (let s of sparkles) {
+        s.x += s.vx;
+        s.y += s.vy;
+        s.alpha -= 0.002+Math.random()*0.002;
+        if (s.alpha <= 0.1) {
+          Object.assign(s, randomSparkle());
+          s.y = Math.random()*canvas.height;
+          s.alpha = 0.7+Math.random()*0.3;
+        }
+        if (s.x < 0 || s.x > canvas.width || s.y < 0 || s.y > canvas.height) {
+          Object.assign(s, randomSparkle());
+          s.x = Math.random()*canvas.width;
+          s.alpha = 0.7+Math.random()*0.3;
+        }
+      }
+    }
+    function animateSparkles() {
+      updateSparkles();
+      drawSparkles();
+      requestAnimationFrame(animateSparkles);
+    }
+    // Initialize sparkles
+    for(let i=0;i<90;i++) sparkles.push(randomSparkle());
+    animateSparkles();
+
+    // Balloons
+    const balloonColors = [
+      'https://i.imgur.com/5xvBq2t.png', // pink
+      'https://i.imgur.com/CQO1Fci.png', // blue
+      'https://i.imgur.com/Ua8BQeK.png', // yellow
+      'https://i.imgur.com/0f4ht6V.png', // green
+      'https://i.imgur.com/z5YZG9y.png', // purple
+    ];
+    function randomBalloon(left) {
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon';
+      balloon.style.left = left + '%';
+      const img = document.createElement('img');
+      img.className = 'balloon-img';
+      img.src = balloonColors[Math.floor(Math.random()*balloonColors.length)];
+      img.alt = "Balloon";
+      balloon.appendChild(img);
+      // random animation delay and duration
+      balloon.style.animationDelay = (Math.random()*4)+'s';
+      balloon.style.animationDuration = (7+Math.random()*4)+'s';
+      return balloon;
+    }
+    function releaseBalloons() {
+      const balloonsDiv = document.getElementById('balloons');
+      balloonsDiv.innerHTML = '';
+      for(let i=0;i<10;i++) {
+        const left = 7 + Math.random()*86;
+        const balloon = randomBalloon(left);
+        balloonsDiv.appendChild(balloon);
+      }
+    }
+    releaseBalloons();
+    setInterval(releaseBalloons, 9000); // new wave every 9 seconds
+  </script>
+</body>
+</html>
